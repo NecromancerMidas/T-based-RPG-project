@@ -5,8 +5,147 @@
     background-color:black;
 }
 .container{
-    width:1000px;
+    width:900px;
     height:600px;
-    border:10px double purple;
-    background-color:white;
+    border:10px groove purple;
+    background-image:url(img/Castle2.png);
+    display:flex;
+    position:relative;
+}
+.commandcontainer{
+    width:600px;
+    height:200px;
+    border:10px groove blue;
+    margin-left:140px;
+    background-color:lightblue;
+    display:flex;
+}
+button{
+    border:6px solid black;
+    background-color:antiquewhite;
+    
+}
+.healthbar{
+    height:30px;
+    width:100px;
+    color:red;
+    background-color:red;
+}
+progress.health {
+    border:5px solid black;
+    width: 100px;
+    height: 30px;
+    background: crimson;
+}
+
+
+progress.health::-webkit-progress-value {
+       background: lightblue;
+    }
+
+
+progress.health::-webkit-progress-value {
+        background: red;
+    }
+
+progress.mana {
+    border: 5px solid black;
+    width: 100px;
+    height: 30px;
+    background: blue;
+}
+
+
+    progress.mana::-webkit-progress-value {
+        background: lightblue;
+    }
+
+
+    progress.mana::-webkit-progress-value {
+        background: blue;
+    }
+.head{
+    border:5px black solid;
+}
+.valuebox{
+    height:86px;
+    width:250px;
+    display:flex;
+}
+.characterbox{
+    height:300px;
+    width:300px;
+    position:absolute;
+    left:0;
+    bottom:0;
+}
+.characterimage{
+    position:absolute;
+}
+.mage{ 
+    z-index:2;
+    right:130px;
+    bottom:10px;
+}
+.warrior{
+    z-index:1;
+    right:0;
+    bottom:20px;
+}
+.healer{
+    z-index:0;
+    right:180px;
+    bottom:40px;
+}
+.bossmetersbox {
+    height: 250px;
+    width: 150px;
+    position:absolute;
+    bottom:0px;
+    right:0px;
+}
+.characterimageboss {
+    position: absolute;
+    bottom:0px;
+    right:0px;
+}
+.bossbarhealth {
+    position:absolute;
+    bottom:25px;
+    right:100px;
+}
+.bossbarmana {
+    position: absolute;
+    bottom: 0px;
+    right: 100px;
+}
+.boss {
+    z-index: 0;
+    right: -40px;
+    bottom: 50px;
+    width:400px;
+    height:300px;
+    position:absolute;
+}
+.red{
+    color:red;
+}
+.blue{
+    color:blue;
+}
+.statdivs{
+
+}
+.commandbuttons{
+width:100px;
+height:100px;
+}
+div.commandbox{
+    height:200px;
+    width:200px;
+   margin-left:auto;
+}
+button:hover {
+    background-color: deepskyblue;
+    color: white;
 }
