@@ -39,6 +39,13 @@ let boss1 = {
     def: 60,
     weaponstr:80,
 }
+let hadturn = {
+    warrior: false,
+    mage: false,
+    healer: false,
+    boss1: false,
+    }
+
 // everyones health calculated through multiplication of their strength stat
 let healthvalues = {
     warriormaxhealth: warrior.str * 10,
@@ -61,6 +68,9 @@ let manavalues = {
     boss1maxmana: boss1.mag * 10,
     boss1mana: boss1.mag * 10,
 }
+let currentchar = "Warrior";
+
+
 let intervalthing; //to clear health bar interval
 let damageresult = 0; //result not initially intended however, helps calculate damage into progres bars. Pro tip don't use progress bars not enjoyable :(
 function Mathrandom(weaponstrength, mainstat) {
@@ -75,10 +85,19 @@ function Mathrandom(weaponstrength, mainstat) {
 
 
 //view
+otherStuff = `<div class="Stats"> Strength:${warrior.str} &nbsp;&nbsp;&nbsp;&nbsp; Strength:${mage.str}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Strength:${healer.str} <br>
+              Magic:${warrior.mag} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Magic:${mage.mag}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Magic:${healer.mag}<br>
+              Speed:${warrior.spd} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Speed:${mage.spd} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Speed:${healer.spd} <br>
+              Defence:${warrior.def} &nbsp;&nbsp;&nbsp;&nbsp;Defence:${mage.def} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Defence:${healer.def}</div>
+
+
+`
+currentcharmenu = `<button class="commandbuttons" id="fight" onclick="menuChange(this.innerHTML, currentchar)">Fight</button>` //placeholder, just warrior for now. later on make a function that cycle between them.
+
 commandBoxInner = `
 
 
-<div class="commandbox"><button class="commandbuttons" id="fight"onclick="menuChange(this.innerHTML)">Fight</button><button class="commandbuttons">Bag</button><button class="commandbuttons">Placeholder</button><button class="commandbuttons">Run,coward.</button>
+<div class="commandbox">${currentcharmenu}<button class="commandbuttons">Bag</button><button class="commandbuttons">Placeholder</button><button class="commandbuttons">Run,coward.</button>
 </div>`
 
 view1();
@@ -114,11 +133,16 @@ function view1() {
 
 <div class="commandcontainer">
 
-<div>Warrior<br>Health:<span class="red">${healthvalues.warriorhealth}</span>/<span class="red">${healthvalues.warriormaxhealth}</span><br>Mana:<span class="blue">${manavalues.warriormana}</span>/<span class="blue">${manavalues.warriormaxmana}</span></div>
+<div class="statdivs">Warrior<br>Health:<span class="red">${healthvalues.warriorhealth}</span>/<span class="red">${healthvalues.warriormaxhealth}</span><br>Mana:<span class="blue">${manavalues.warriormana}</span>/<span class="blue">${manavalues.warriormaxmana}</span></div>
 
-<div>Mage<br>Health:<span class="red">${healthvalues.magehealth}</span>/<span class="red">${healthvalues.magemaxhealth}</span><br>Mana:<span class="blue">${manavalues.magemana}</span>/<span class="blue">${manavalues.magemaxmana}</span></div>
 
-<div>Healer<br>Health:<span class="red">${healthvalues.healerhealth}</span>/<span class="red">${healthvalues.healermaxhealth}</span><br>Mana:<span class="blue">${manavalues.healermana}</span>/<span class="blue">${manavalues.healermaxmana}</span></div>
+<div class="statdivs">Mage<br>Health:<span class="red">${healthvalues.magehealth}</span>/<span class="red">${healthvalues.magemaxhealth}</span><br>Mana:<span class="blue">${manavalues.magemana}</span>/<span class="blue">${manavalues.magemaxmana}</span></div>
+
+<div class="statdivs">Healer<br>Health:<span class="red">${healthvalues.healerhealth}</span>/<span class="red">${healthvalues.healermaxhealth}</span><br>Mana:<span class="blue">${manavalues.healermana}</span>/<span class="blue">${manavalues.healermaxmana}</span></div>
+
+${otherStuff}
+
+
 
 ${commandBoxInner}</div >
 
@@ -133,7 +157,24 @@ ${commandBoxInner}</div >
 
 `
 }
-fightMenu = `
+let warriorMenu = `<div class=Stats><button class="smallercommandbuttons" onclick="regularStrike()">Regular Strike</button>
+                <button class="smallercommandbuttons" onclick="multiStrike()">Multi strike</button><br>
+                <button class="smallercommandbuttons">Guard</button>
+                <button class="smallercommandbuttons">Enchant Blade</button></div>`
+
+
+let mageMenu = `<div class=Stats><button class="smallercommandbuttons">Magic Bolt</button>
+                <button class="smallercommandbuttons">Endless Torrent</button><br>
+                <button class="smallercommandbuttons">Barrier</button>
+                <button class="smallercommandbuttons">Last Word</button></div>`
+
+
+let healerMenu = `<div class=Stats><button class="smallercommandbuttons">Heal</button>
+                <button class="smallercommandbuttons">Multi Heal</button><br>
+                <button class="smallercommandbuttons">Poisoned Supplies</button>
+                <button class="smallercommandbuttons">Empaths Prayer</button></div>`
+
+let fightMenu = `
 <button onclick="teststat(warrior.weaponstr, warrior.str)">damage warrior</button> 
 <button onclick="teststat(mage.weaponstr, mage.mag)">damage mage</button>
 <button onclick="teststat(healer.weaponstr, healer.mag)">healer damage</button>
@@ -168,17 +209,23 @@ function takedamage(target, damage) {
     else if (target === "mage") {
         damage -= mage.def;
         damageresult = damage;
-        intervalthing = setInterval(damageanimation, 10, target)
-        console.log(damage);
+        intervalthing = setInterval(damageanimation, 10, target);
+        console.log(damageresult);
     }
     else if (target === "healer") {
         damage -= healer.def
         damageresult = damage;
-        intervalthing = setInterval(damageanimation, 10, target)
-        console.log(damage);
+        intervalthing = setInterval(damageanimation, 10, target);
+        console.log(damageresult);
+    }
+    else if (target === "Boss1") {
+        damage -= boss1.def;
+        damageresult = damage;
+        intervalthing = setInterval(damageanimation, 10, target);
+        console.log(damageresult);
     }
 }
-function setvalues() {
+function setvalues() { //dead code remove later, maybe turn it into a reset function later
     healthvalues.warriorhealth = healthvalues.warriormaxhealth;
 }
 function damageanimation(charClass){
@@ -200,32 +247,44 @@ function damageanimation(charClass){
         }
     }
     else if (charClass === "healer") {
-        if (damage === 0) {
+        if (damageresult === 0) {
             clearInterval(intervalthing)
             view1();
         }
         else {
             healthvalues.healerhealth--;
-            damage--;
+            damageresult--;
             view1();
-            console.log(damage);
+            console.log(damageresult);
             
         }
 
 
     }
     else if (charClass === "mage") {
-        if (damage === 0) {
+        if (damageresult === 0) {
             clearInterval(intervalthing)
             view1();
         }
         else {
             healthvalues.magehealth--;
-            damage--;
+            damageresult--;
             view1();
-            console.log(damage);
+            console.log(damageresult);
         }
 
+    }
+    else if (charClass === "Boss1") {
+        if (damageresult === 0) {
+            clearInterval(intervalthing)
+            view1();
+        }
+        else {
+            healthvalues.boss1health--;
+            damageresult--;
+            view1();
+            console.log(damageresult);
+        }
     }
     else {
         clearInterval(intervalthing)
@@ -235,8 +294,56 @@ function damageanimation(charClass){
 function stopinterval() {
     clearInterval(intervalthing)
 }
-function menuChange(button) {
-    if (button === "Fight")
-        commandBoxInner = fightMenu;
+function menuChange(button, char) {
+    if (button === "Fight") {
+        if (char === "Warrior") {
+            otherStuff = warriorMenu;
+        }
+        else if (char === "Mage") {
+            otherStuff = mageMenu;
+        }
+        else if (char === "Healer")
+            otherStuff = healerMenu;
+        }
     view1();
 }
+function charselect() {
+    if (hadturn.warrior === false) {
+        currentchar = "Warrior"
+    }
+    else if (hadturn.healer === false) {
+        currentchat = "Healer"
+    }
+    else if (hadturn.boss1 === false) {
+        bossstrike();
+        hadturn.boss1 = true;
+    }
+    else if (hadturn.mage === false) {
+        currentchar = "Mage"
+    }
+}
+function regularStrike() {
+    damage = teststat(warrior.weaponstr, warrior.str);
+    takedamage("Boss1", damage);
+}
+function multiStrike() {
+   let i = Math.floor(Math.random() * 4) + 1;
+    for (i > 0; i--;) {
+        if (damageresult === 0) {
+            damage = teststat(warrior.weaponstr, warrior.str)
+            damage /= 1.25;
+            damage = Math.round(damage);
+            damageresult = damage;
+            takedamage("Boss1", damageresult);
+            console.log(multiStrike);
+        }
+    };
+}
+
+
+
+
+    /*let warriorMenu = `<div class=Stats><button class="smallercommandbuttons" onclick="regularStrike()">Regular Strike</button>
+                <button class="smallercommandbuttons">Triple strike</button><br>
+                <button class="smallercommandbuttons">Guard</button>
+                <button class="smallercommandbuttons">Enchant Blade</button></div>`*/

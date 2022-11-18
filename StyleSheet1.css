@@ -134,7 +134,7 @@ progress.mana {
     color:blue;
 }
 .statdivs{
-
+height:60px;
 }
 .commandbuttons{
 width:100px;
@@ -148,4 +148,16 @@ div.commandbox{
 button:hover {
     background-color: deepskyblue;
     color: white;
+}
+.Stats {
+    height:140px;
+    position:absolute;
+    bottom:70px;
+}
+.smallercommandbuttons{
+    height:50px;
+    width:150px;
+}
+smallercommandbuttons:hover{
+
 }
