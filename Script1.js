@@ -69,6 +69,8 @@ let manavalues = {
     boss1mana: boss1.mag * 10,
 }
 let currentchar = "Warrior";
+let randomstrikes = 0;
+let multimove;
 
 
 let intervalthing; //to clear health bar interval
@@ -92,7 +94,7 @@ otherStuff = `<div class="Stats"> Strength:${warrior.str} &nbsp;&nbsp;&nbsp;&nbs
 
 
 `
-currentcharmenu = `<button class="commandbuttons" id="fight" onclick="menuChange(this.innerHTML, currentchar)">Fight</button>` //placeholder, just warrior for now. later on make a function that cycle between them.
+currentcharmenu = `<button class="commandbuttons" id="fight" onclick="menuChange(this.innerHTML)">Fight</button>` //placeholder, just warrior for now. later on make a function that cycle between them.
 
 commandBoxInner = `
 
@@ -170,7 +172,7 @@ let mageMenu = `<div class=Stats><button class="smallercommandbuttons">Magic Bol
 
 
 let healerMenu = `<div class=Stats><button class="smallercommandbuttons">Heal</button>
-                <button class="smallercommandbuttons">Multi Heal</button><br>
+                <button class="smallercommandbuttons" onclick="multiHeal('multi')">Multi Heal</button><br>
                 <button class="smallercommandbuttons">Poisoned Supplies</button>
                 <button class="smallercommandbuttons">Empaths Prayer</button></div>`
 
@@ -203,98 +205,224 @@ function takedamage(target, damage) {
     if (target === "warrior") {
         damage -= warrior.def; //if the warrior is targeted it will deduct his defence from the damage. Reducing the damage done. 
         damageresult = damage; //changing the empty variable damageresult to store current damage, if I send it as a parameter the defence deduction does not apply.
-        intervalthing = setInterval(damageanimation, 10, target); //sets the animation for the damage, this function also filters out which bar needs to be reduced.
+        intervalthing = setInterval(damageanimation, 10, target, "damage"); //sets the animation for the damage, this function also filters out which bar needs to be reduced.
         console.log(damageresult);
     }
     else if (target === "mage") {
         damage -= mage.def;
         damageresult = damage;
-        intervalthing = setInterval(damageanimation, 10, target);
+        intervalthing = setInterval(damageanimation, 10, target, "damage");
         console.log(damageresult);
     }
     else if (target === "healer") {
         damage -= healer.def
         damageresult = damage;
-        intervalthing = setInterval(damageanimation, 10, target);
+        intervalthing = setInterval(damageanimation, 10, target, "damage");
         console.log(damageresult);
     }
     else if (target === "Boss1") {
         damage -= boss1.def;
         damageresult = damage;
-        intervalthing = setInterval(damageanimation, 10, target);
+        intervalthing = setInterval(damageanimation, 10, target, "damage");
         console.log(damageresult);
     }
 }
+function becomeHealed(target) {
+    if (target === "warrior") {
+        
+        intervalthing = setInterval(damageanimation, 10, target, "heal"); //sets the animation for the damage, this function also filters out which bar needs to be reduced.
+        console.log(damageresult);
+    }
+    else if (target === "mage") {
+        
+        intervalthing = setInterval(damageanimation, 10, target, "heal");
+        console.log(damageresult);
+    }
+    else if (target === "healer") {
+        
+        intervalthing = setInterval(damageanimation, 10, target, "heal");
+        console.log(damageresult);
+    }
+    else if (target === "Boss1") {
+        
+        intervalthing = setInterval(damageanimation, 10, target, "heal");
+        console.log(damageresult);
+    }
+    else if (target === "multi") {
+        
+        intervalthing = setInterval(damageanimation, 10, target, "heal");
+        console.log(damageresult);
+    }
+}
+
+
+
+
 function setvalues() { //dead code remove later, maybe turn it into a reset function later
     healthvalues.warriorhealth = healthvalues.warriormaxhealth;
 }
-function damageanimation(charClass){
-    if (charClass === "warrior") {
-        if (damageresult === 0) {
-            clearInterval(intervalthing);
-            view1();
-            console.log(intervalthing);
+function damageanimation(charClass, type) {
+    if (type === "damage") {
+        if (charClass === "multi") {
+            if (damageresult === 0) {
+                clearInterval(intervalthing);
+                view1();
+                console.log(intervalthing);
+            }
+            else {
+                healthvalues.warriorhealth--;
+                healthvalues.healerhealth--;
+                healthvalues.magehealth--;
+                damageresult--;
+            }
+        }
+        else if (charClass === "warrior") {
+            if (damageresult === 0) {
+                clearInterval(intervalthing);
+                view1();
+                console.log(intervalthing);
+            }
+            else {
+                healthvalues.warriorhealth--;
+                damageresult--;
+                view1();
+                console.log(damageresult);
+                //if (healthvalues.warriorhealth === 0;) {
+                //clearInterval(intervalthing)
+                //alert (gameover)
+                //}
+            }
+        }
+        else if (charClass === "healer") {
+            if (damageresult === 0) {
+                clearInterval(intervalthing)
+                view1();
+            }
+            else {
+                healthvalues.healerhealth--;
+                damageresult--;
+                view1();
+                console.log(damageresult);
+
+            }
+
+
+        }
+        else if (charClass === "mage") {
+            if (damageresult === 0) {
+                clearInterval(intervalthing)
+                view1();
+            }
+            else {
+                healthvalues.magehealth--;
+                damageresult--;
+                view1();
+                console.log(damageresult);
+            }
+
+        }
+        else if (charClass === "Boss1") {
+            if (damageresult === 0) {
+                clearInterval(intervalthing)
+                view1();
+            }
+            else {
+                healthvalues.boss1health--;
+                damageresult--;
+                view1();
+                console.log(damageresult);
+            }
         }
         else {
-            healthvalues.warriorhealth--;
-            damageresult--;
-            view1();
-            console.log(damageresult);
-            //if (healthvalues.warriorhealth === 0;) {
-            //clearInterval(intervalthing)
-            //alert (gameover)
-        //}
-        }
-    }
-    else if (charClass === "healer") {
-        if (damageresult === 0) {
             clearInterval(intervalthing)
             view1();
         }
-        else {
-            healthvalues.healerhealth--;
-            damageresult--;
-            view1();
-            console.log(damageresult);
-            
+    }
+    else if (type === "heal") { 
+        if (charClass === "multi") {
+            if (damageresult === 0) {
+                clearInterval(intervalthing);
+                view1();
+                console.log(intervalthing);
+            }
+            else {
+                healthvalues.warriorhealth++;
+                healthvalues.healerhealth++;
+                healthvalues.magehealth++;
+                damageresult--;
+                view1();
+            }
         }
 
+       else if (charClass === "warrior") {
+            if (damageresult === 0) {
+                clearInterval(intervalthing);
+                view1();
+                console.log(intervalthing);
+            }
+            else {
+                healthvalues.warriorhealth++;
+                damageresult--;
+                view1();
+                console.log(damageresult);
+                //if (healthvalues.warriorhealth === 0;) {
+                //clearInterval(intervalthing)
+                //alert (gameover)
+                //}
+            }
+        }
+        else if (charClass === "healer") {
+            if (damageresult === 0) {
+                clearInterval(intervalthing)
+                view1();
+            }
+            else {
+                healthvalues.healerhealth++;
+                damageresult--;
+                view1();
+                console.log(damageresult);
 
-    }
-    else if (charClass === "mage") {
-        if (damageresult === 0) {
+            }
+
+
+        }
+        else if (charClass === "mage") {
+            if (damageresult === 0) {
+                clearInterval(intervalthing)
+                view1();
+            }
+            else {
+                healthvalues.magehealth++;
+                damageresult--;
+                view1();
+                console.log(damageresult);
+            }
+
+        }
+        else if (charClass === "Boss1") {
+            if (damageresult === 0) {
+                clearInterval(intervalthing)
+                view1();
+            }
+            else {
+                healthvalues.boss1health++;
+                damageresult--;
+                view1();
+                console.log(damageresult);
+            }
+        }
+        else {
             clearInterval(intervalthing)
             view1();
         }
-        else {
-            healthvalues.magehealth--;
-            damageresult--;
-            view1();
-            console.log(damageresult);
-        }
-
-    }
-    else if (charClass === "Boss1") {
-        if (damageresult === 0) {
-            clearInterval(intervalthing)
-            view1();
-        }
-        else {
-            healthvalues.boss1health--;
-            damageresult--;
-            view1();
-            console.log(damageresult);
-        }
-    }
-    else {
-        clearInterval(intervalthing)
-        view1();
     }
 }
 function stopinterval() {
     clearInterval(intervalthing)
 }
-function menuChange(button, char) {
+function menuChange(button) {
+    charselect();
+    char = currentchar;
     if (button === "Fight") {
         if (char === "Warrior") {
             otherStuff = warriorMenu;
@@ -312,7 +440,7 @@ function charselect() {
         currentchar = "Warrior"
     }
     else if (hadturn.healer === false) {
-        currentchat = "Healer"
+        currentchar = "Healer"
     }
     else if (hadturn.boss1 === false) {
         bossstrike();
@@ -325,25 +453,79 @@ function charselect() {
 function regularStrike() {
     damage = teststat(warrior.weaponstr, warrior.str);
     takedamage("Boss1", damage);
+    hadturn.warrior = true;
 }
 function multiStrike() {
-   let i = Math.floor(Math.random() * 4) + 1;
-    for (i > 0; i--;) {
-        if (damageresult === 0) {
-            damage = teststat(warrior.weaponstr, warrior.str)
-            damage /= 1.25;
-            damage = Math.round(damage);
-            damageresult = damage;
-            takedamage("Boss1", damageresult);
-            console.log(multiStrike);
+    randomstrikes = Math.floor(Math.random() * 2) + 2;
+    duration = teststat(warrior.weaponstr, warrior.str) * 10;
+    multimove = setInterval(multiStrikeExecution, duration)
+    hadturn.warrior = true;
+
+
+/*        if (damageresult === 0) {
+            multiStrikeExecution();
         }
-    };
+        else if (damageresult > 100) {
+            setTimeout(multiStrikeExecution, 7000);
+        }
+        else if (damageresult > 50) {
+            setTimeout(multiStrikeExecution, 5000);
+        }
+        else if (damageresult > 25) {
+            setTimeout(multiStrikeExecution, 2500);
+        }
+        else if (damageresult < 15) {
+            setTimeout(multiStrikeExecution, 1000);
+        }
+    */
+} 
+function multiStrikeExecution() {
+    if (randomstrikes !== 0) {
+        randomstrikes--;
+        damage = teststat(warrior.weaponstr, warrior.str)
+        damage /= 1.25;
+        damage = Math.round(damage);
+        damageresult = damage;
+        takedamage("Boss1", damageresult);
+        console.log(multiStrike);
+    }
+    else {
+        clearInterval(multimove)
+
+    }
 }
 
-
-
+//placeholder warrior moves
 
     /*let warriorMenu = `<div class=Stats><button class="smallercommandbuttons" onclick="regularStrike()">Regular Strike</button>
                 <button class="smallercommandbuttons">Triple strike</button><br>
                 <button class="smallercommandbuttons">Guard</button>
                 <button class="smallercommandbuttons">Enchant Blade</button></div>`*/
+
+
+
+
+//placeholder Healer moves
+function multiHeal(target) {
+    heal = teststat(healer.weaponstr, healer.mag);
+    damageresult = heal;
+    damageresult /= 1.5;
+    damageresult = Math.round(damageresult)
+    becomeHealed(target);
+
+
+}
+
+
+
+
+
+
+
+//placeholder Mage moves
+
+
+
+
+
+//placeholder Boss moves and logic
