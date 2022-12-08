@@ -141,6 +141,10 @@ let animationVars = {
     spellHeight: 200,
     spellWidth: 100,
     spellOpacity: 0,
+    boss1Right: -40,
+    fireBreathHeight: 100,
+    fireBreathWidth: 100,
+    fireBreathOpacity: 0,
 }
 let playing = false;
 let animationInterval;
@@ -194,10 +198,10 @@ function view1() {
 <image class="head" src="img/warriorhead.png"></image><div><progress id="healthbar" class="health" value="${healthvalues.warriorhealth}" max="${healthvalues.warriormaxhealth}"></progress><br>
 <progress id="healthbar" class="mana" value="${manavalues.warriormana}" max="${manavalues.warriormaxmana}"></progress></div></div>
 
-<div class="characterbox"><image id="warrior" class="characterimage warrior" style="right:${animationVars.warriorRight}px" src="img/warrior1.png"></image><image class="characterimage mage" src="img/mage1.png"></image><image class="characterimage healer" src="img/healer1.png"></image></div>
+<div class="characterbox"><span class="fireBreath"style="height:${animationVars.fireBreathHeight}px; width:${animationVars.fireBreathWidth}px;opacity:${animationVars.fireBreathOpacity}% "></span><image id="warrior" class="characterimage warrior" style="right:${animationVars.warriorRight}px" src="img/warrior1.png"></image><image class="characterimage mage" src="img/mage1.png"></image><image class="characterimage healer" src="img/healer1.png"></image></div>
 
 
-<div><image src="img/boss1.png" class="boss"><span class="spell" style="height:${animationVars.spellHeight}px;width:${animationVars.spellWidth}px;opacity:${animationVars.spellOpacity}%"></span></div>
+<div><image src="img/boss1.png" class="boss" style="right:${animationVars.boss1Right}px"><span class="spell" style="height:${animationVars.spellHeight}px;width:${animationVars.spellWidth}px;opacity:${animationVars.spellOpacity}%"></span></div>
 <div class="bossmetersbox"><image class="characterimageboss head" src="img/bosshead.png"></image><div><progress id="healthbar" class="health bossbarhealth" style="width:200px" value="${healthvalues.boss1health}" max="${healthvalues.boss1maxhealth}"></progress><br>
 <progress id="healthbar" class="bossbarmana mana" style="width:200px" value="${manavalues.boss1mana}" max="${manavalues.boss1maxmana}"></progress></div></div>
 
@@ -914,6 +918,8 @@ function unnerve() {
 function bossstrike(target) {
     damage = teststat(boss1.weaponstr, boss1.str); //sends weaponstr and bossstr to be calculated in the mathrandom function through teststat(redundant really) then sets the damage to that value
     takedamage(target, damage); //variable target gets sent through onclick. depending on who it strikes the next function will apply differently.
+    animationInterval = setInterval(bossAnimations, 10 , "bossStrike");
+    samuraiStrike();
 }
 function clobber() {
     damage = Math.round(testat(boss1.weaponstre, boss1.str) * 1.5)
@@ -947,11 +953,15 @@ function deadlyStrike() {
     }
 
     takedamage(boss1.bossTarget, damageresult);
+    animationInterval = setInterval(bossAnimations, 10 ,"deadlyStrike")
+    samuraiStrike();
 }
 function flameBreath() {
     damage = teststat(boss1.weaponstr, boss1.str)
     damageresult = Math.round(damage / 2)
-    takedamage('multi',damageresult)
+    takedamage('multi', damageresult)
+    animationInterval = setInterval(bossAnimations,10,"fireBreath");
+    fireBreathSound();
 
 }
 function prepareMegaFlameBreath() {
@@ -970,6 +980,8 @@ function megaFlameBreath() {
     } 
     hadturn.boss1 = true
     takedamage("multi", damageresult)
+    animationInterval = setInterval(bossAnimations,10,"megaFireBreath")
+    fireBreathSound();
 
 }
 function bossBigBrain() {
@@ -1291,11 +1303,19 @@ function combatAnimation(user,move) {
 function samuraiStrike() {
     let audio = document.createElement('audio');
         audio.setAttribute('src', 'sound/samurai-slash-6845.mp3');
-        audio.play();
+    audio.volume = 0.2;
+    audio.play();
 }
 function magicSpell() {
     let audio = document.createElement('audio');
     audio.setAttribute('src', 'sound/protego-105518.mp3');
+    audio.volume = 0.2;
+    audio.play();
+}
+function fireBreathSound() {
+    let audio = document.createElement('audio');
+    audio.setAttribute('src', 'sound/short-fireball-woosh-6146.mp3');
+    audio.volume = 0.2;
     audio.play();
 }
 function music() {
@@ -1305,7 +1325,45 @@ function music() {
     else {
         let audio = document.createElement('audio');
         audio.setAttribute('src', 'sound/alexander-nakarada-behind-the-sword.mp3');
+        audio.volume = 0.1;
         audio.play();
         playing = true;
     }
+}
+function bossAnimations(move) {
+    if (move === "bossStrike" && animationVars.start === true || move === "deadlyStrike" && animationVars.start === true) {
+        animationVars.boss1Right += 10;
+        view1();
+        if (animationVars.boss1Right === 350) {
+            animationVars.start = false
+        }
+    }
+    else if (move === "bossStrike" && animationVars.start === false || move === "deadlyStrike" && animationsVars.start === false) {
+        animationVars.boss1Right -= 10;
+        view1();
+        if (animationVars.boss1Right === -40) {
+            clearInterval(animationInterval)
+            animationVars.start = true;
+        }
+    }
+    else if (move === "fireBreath" && animationVars.start === true || move === "megaFireBreath" && animationVars.start === true) {
+        animationVars.fireBreathHeight += 5;
+        animationVars.fireBreathWidth += 20;
+        animationVars.fireBreathOpacity += 10;
+        view1();
+        if (animationVars.fireBreathWidth === 300) {
+            animationVars.start = false;
+        }
+    }
+    else if (move === "fireBreath" && animationVars.start === false || move === "megaFireBreath" && animationVars.start === false) {
+        animationVars.fireBreathHeight -= 5;
+        animationVars.fireBreathWidth -= 20;
+        animationVars.fireBreathOpacity -= 10;
+        view1();
+        if (animationVars.fireBreathWidth === 100) {
+            animationVars.start = true
+            clearInterval(animationInterval);
+        }
+    }
+
 }
