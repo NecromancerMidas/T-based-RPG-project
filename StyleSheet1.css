@@ -82,20 +82,22 @@ progress.mana {
 .characterimage{
     position:absolute;
 }
-.mage{ 
-    z-index:2;
-    right:130px;
-    bottom:10px;
+.mage {
+    z-index: 2;
+    right: 130px;
+    bottom: 10px;
+
 }
-.warrior{
-    z-index:1;
-    right:0;
-    bottom:20px;
+.warrior {
+    z-index: 1;
+    right: 0;
+    bottom: 20px;
 }
-.healer{
-    z-index:0;
-    right:180px;
-    bottom:40px;
+.healer {
+    z-index: 0;
+    right: 180px;
+    bottom: 40px;
+
 }
 .bossmetersbox {
     height: 250px;
@@ -133,6 +135,12 @@ progress.mana {
 .blue{
     color:blue;
 }
+.green{
+    color:green;
+}
+.yellow{
+    color:yellow;
+}
 .statdivs{
 height:60px;
 }
@@ -150,14 +158,41 @@ button:hover {
     color: white;
 }
 .Stats {
-    height:140px;
+    height:160px;
     position:absolute;
-    bottom:70px;
+    bottom:50px;
 }
 .smallercommandbuttons{
     height:50px;
     width:150px;
 }
-smallercommandbuttons:hover{
-
+tooltip:hover{
+    visibility:visible;
+}
+.tooltip{
+    visibility: hidden;
+    position: absolute;
+    background-color:black;
+    color:lightgoldenrodyellow;
+    top:-30px;
+    opacity:0.8;
+    text-align:center;
+    height:auto;
+    width:250px;
+    border:3px solid purple;
+    left:5px;
+}
+button:hover .tooltip{
+    visibility:visible;
+}
+.mutecommandbutton{
+    height:100px;
+    width:300px;
+}
+.spell{
+background-color: blue;
+border-radius:50%;
+position:absolute;
+bottom:40px;
+right:120px;
 }
