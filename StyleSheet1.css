@@ -19,6 +19,7 @@
     margin-left:140px;
     background-color:lightblue;
     display:flex;
+    position:absolute;
 }
 button{
     border:6px solid black;
@@ -160,7 +161,7 @@ button:hover {
 .Stats {
     height:160px;
     position:absolute;
-    bottom:50px;
+    bottom:-40px;
 }
 .smallercommandbuttons{
     height:50px;
@@ -195,4 +196,11 @@ border-radius:50%;
 position:absolute;
 bottom:40px;
 right:120px;
+}
+.fireBreath{
+    background-color:red;
+    border-radius:25%;
+    position:absolute;
+    bottom:0px;
+    left:60px;
 }
